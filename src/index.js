@@ -1,198 +1,9 @@
-const locations = [
-  {
-    id: 'simonTomb',
-    name: 'Simon Tomb',
-    connections: [
-      {
-        to: 'simonTombBottom'
-      }
-    ]
-  },
-  {
-    id: 'simonTombBottom',
-    name: 'Simon Tomb Bottom'
-  },
-  {
-    id: 'kakaka',
-    name: 'Kakaka Plaza',
-    type: 'plaza',
-    connections: [
-      {
-        to: 'forestRoad1'
-      },
-      {
-        to: 'kakakaPub'
-      },
-      {
-        to: 'kakakaCastle'
-      },
-      {
-        to: 'kakakaGraveyard'
-      },
-    ]
-  },
-  {
-    id: 'kakakaPub',
-    name: 'Kakaka Pub',
-    type: 'pub'
-  },
-  {
-    id: 'kakakaCastle',
-    name: 'Kakaka Castle',
-    type: 'castle'
-  },
-  {
-    id: 'kakakaGraveyard',
-    name: 'Kakaka Graveyard',
-    type: 'graveyard'
-  },
-  {
-    id: 'forestRoad1',
-    name: 'Forest Road',
-    type: 'road',
-    connections: [
-      {
-        to: 'kakake'
-      },
-      {
-        to: 'darkForest1'
-      }
-    ]
-  },
-  {
-    id: 'kakake',
-    name: 'Kakake',
-    type: 'plaza',
-    connections: [
-      {
-        to: 'kakakePub'
-      },
-      {
-        to: 'rockyRoad'
-      },
-      {
-        to: 'mountainsRoad'
-      },
-    ]
-  },
-  {
-    id: 'kakakePub',
-    name: 'Kakake Pub',
-    type: 'pub'
-  },
-  {
-    id: 'darkForest1',
-    name: 'Dark Forest',
-    type: 'darkForest',
-    connections: [
-      {
-        to: 'darkForest2'
-      }
-    ]
-  },
-  {
-    id: 'darkForest2',
-    name: 'Dark Forest',
-    type: 'darkForest',
-    connections: [
-      {
-        to: 'darkForest3'
-      }
-    ]
-  },
-  {
-    id: 'darkForest3',
-    name: 'Dark Forest',
-    type: 'darkForest',
-    connections: [
-      {
-        to: 'darkForest4'
-      }
-    ]
-  },
-  {
-    id: 'darkForest4',
-    name: 'Dark Forest',
-    type: 'darkForest'
-  },
-  {
-    id: 'rockyRoad',
-    name: 'Rocky Road',
-    type: 'road',
-    connections: [
-      {
-        to: 'draculaCastle'
-      }
-    ]
-  },
-  {
-    id: 'draculaCastle',
-    name: 'Dracula Castle',
-    type: 'castle',
-    connections: [
-      {
-        to: 'draculaHall'
-      }
-    ]
-  },
-  {
-    id: 'draculaHall',
-    name: 'Dracula Hall',
-    type: 'castleHall'
-  },
+import random from './random';
+import builder from './builder';
+import world from './world';
+import items from './generators/items';
 
-  {
-    id: 'mountainsRoad',
-    name: 'Mountain Road',
-    type: 'road',
-    connections: [
-      {
-        to: 'mountainTop'
-      }
-    ]
-  },
-  {
-    id: 'mountainTop',
-    name: 'Mount Hya',
-    type: 'mountain'
-  }
-];
-
-const items = { // This is also built dynamically
-  killerWhip: {
-    name: 'Killer Whip'
-  },
-  crownOfLaurel: {
-    name: 'Crown of Laurel'
-  }
-};
-
-const locationsMap = {};
-
-function readyData() {
-  locations.forEach(location => {
-    locationsMap[location.id] = location;
-    if (!location.connections) {
-      location.connections = [];
-    }
-  });
-  locations.forEach(location => {
-    location.connections.forEach(connection => {
-      if (connection.recyprocal) {
-        return;
-      }
-      connection.to = locationsMap[connection.to];
-      const recyprocalConnection = Object.assign(
-        {
-          recyprocal: true,
-        }, connection,
-        {
-          to: location
-        });
-      connection.to.connections.push(recyprocalConnection);
-    });
-  });
-}
+const locationsMap = world.getLocationsMap();
 
 const playerStatus = {
   location: null,
@@ -207,134 +18,11 @@ function start () {
   campaign.goals = [
     {
       type: 'defeat',
-      target: 'dracula',
-      progress: 0,
-      plotline: [ // This should be built in runtime, based on the campaign progress
-        {
-          id: 'meetLouis',
-          trigger: {
-            type: 'enterLocation',
-            locationType: 'pub',
-            chance: 70
-          },
-          type: 'meet',
-          description: 'a middle aged man',
-          dialog: [
-            'I am Louis.',
-            'Dracula killed my wife. Help me avenge her!',
-            'An old man living in the forest knows the secret to kill Dracula.'
-          ]
-        },
-        {
-          id: 'meetOldMan',
-          requires: 'meetLouis', // This won't be needed once the plot is build dynamically
-          trigger: {
-            type: 'enterLocation',
-            locationType: 'darkForest',
-            chance: 80
-          },
-          type: 'meet',
-          description: 'an Old man',
-          dialog: [
-            'So, you are seeking to kill Dracula',
-            'You will need to find two things:',
-            'The killer whip and the crown of laurel',
-            'The killer whip is in the tomb of Simon',
-            'I don\'t know about the crown of Laurel',
-          ]
-        },
-        {
-          id: 'meetPete',
-          requires: 'meetOldMan', // This won't be needed once the plot is build dynamically
-          trigger: {
-            type: 'enterLocation',
-            locationType: 'pub',
-            chance: 70
-          },
-          type: 'meet',
-          description: 'a middle aged woman',
-          dialog: [
-            'I am Pete.',
-            'Simon was buried in Mount Hya'
-          ]
-        },
-        {
-          id: 'discoverSimonTomb',
-          requires: 'meetPete', // This won't be needed once the plot is build dynamically
-          trigger: {
-            type: 'enterLocation',
-            locationId: 'mountainTop'
-          },
-          type: 'discoverConnection',
-          description: 'You find the entrance to Simon Tomb',
-          locationId: 'simonTomb'
-        },
-        {
-          id: 'findKillerWhip',
-          requires: 'meetOldMan', // This won't be needed once the plot is build dynamically
-          trigger: {
-            type: 'enterLocation',
-            locationId: 'simonTombBottom'
-          },
-          type: 'find',
-          itemId: 'killerWhip'
-        },
-        {
-          id: 'discoverCrownOfLaurel',
-          requires: 'meetOldMan', // This won't be needed once the plot is build dynamically
-          trigger: {
-            type: 'enterLocation',
-            locationType: 'pub',
-            chance: 20
-          },
-          type: 'meet',
-          description: 'an beautiful woman',
-          dialog: [
-            'The crown of Laurel... my grandmother wore it',
-            'You can find it at her tomb, in Kakaka'
-          ]
-        },
-        {
-          id: 'findCrownOfLaurel',
-          requires: 'discoverCrownOfLaurel', // This won't be needed once the plot is build dynamically
-          trigger: {
-            type: 'enterLocation',
-            locationId: 'kakakaGraveyard'
-          },
-          type: 'find',
-          itemId: 'crownOfLaurel'
-        },
-        {
-          id: 'killDracula',
-          trigger: {
-            type: 'enterLocation',
-            locationId: 'draculaHall',
-            hasItems: ['killerWhip', 'crownOfLaurel']
-          },
-          type: 'meet',
-          description: 'Dracula',
-          dialog: [
-            'Argh! It\'s the crown of Laurel and the Sacred Whip!',
-            'I dieeee!!!!'
-          ],
-          gameOver: true
-        },
-        {
-          id: 'deathByDracula',
-          trigger: {
-            type: 'enterLocation',
-            locationId: 'draculaHall'
-          },
-          type: 'meet',
-          description: 'Dracula',
-          dialog: [
-            'Die, puny human!'
-          ],
-          gameOver: true
-        },
-      ]
+      villain: 'dracula',
+      progress: 0
     }
   ];
+  campaign.goals[0].plotline = builder.makePlotline();
   intro();
   updateContext();
 }
@@ -386,7 +74,7 @@ function enterLocation(location) {
       (trigger.locationId && location.id === trigger.locationId) ||
       (trigger.locationType && location.type === trigger.locationType)
     ) {
-      if (trigger.chance && !chance(trigger.chance)) {
+      if (trigger.chance && !random.chance(trigger.chance)) {
         // TODO: Mark location as used
         return;
       }
@@ -444,8 +132,8 @@ function processMeetEvent(event) {
 }
 
 function processFindEvent(event) {
-  const item = items[event.itemId];
-  print('You find ' + item.name);
+  const item = items.get(event.itemId);
+  print('You find ' + item.description);
   playerStatus.items[event.itemId] = item;
 }
 
@@ -488,12 +176,6 @@ function keydown(keyEvent) {
 
 document.addEventListener("keydown", keydown, true);
 
-// Utility
-
-function chance(percent) {
-  return Math.random() <= percent / 100;
-}
 
 // Program Execution
-  readyData();
 start();
