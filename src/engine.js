@@ -1,6 +1,7 @@
 import random from './random';
 import builder from './builder';
 import world from './world';
+import consoleui from './consoleui';
 import items from './generators/items';
 
 const locationsMap = world.getLocationsMap();
@@ -12,8 +13,15 @@ const playerStatus = {
 };
 
 const campaign = {};
+let ui = null;
 
-function start () {
+function start (_ui) {
+  if (!_ui) {
+    ui = consoleui;
+    ui.init();
+  } else {
+    ui = _ui;
+  }
   playerStatus.location = locationsMap.kakaka;
   campaign.goals = [
     {
@@ -23,14 +31,8 @@ function start () {
     }
   ];
   campaign.goals[0].plotline = builder.makePlotline();
-  intro();
+  ui.showIntro(campaign);
   updateContext();
-}
-
-function intro() {
-  campaign.goals.forEach(goal => {
-    print('You must '+ goal.type + ' ' + goal.target);
-  });
 }
 
 function updateContext() {
@@ -38,27 +40,21 @@ function updateContext() {
     return; // Game dies here.
   }
   const location = playerStatus.location;
-  print('It\'s Wednesday, morning'); // TODO: Simulate time passing
-  print('You are in ' + location.name);
-  print('What do you want to do?');
-  let counter = 1;
   const options = [];
   location.connections.forEach(connection => {
-    print(counter + ' - Go to ' + connection.to.name);
     options.push ({
       type: 'enterLocation',
       location: connection.to
     })
-    counter++
   });
-  readOption().then(option => selectOption(options[option - 1]));
+  ui.printLocationInfo(location, options);
+  ui.readOption().then(option => selectOption(options[option - 1]));
 }
 
 function selectOption(option) {
   if (option && option.type === 'enterLocation') {
     enterLocation(option.location);
   }
-  print('------');
   updateContext();
 }
 
@@ -127,18 +123,17 @@ function processEvent(event) {
 }
 
 function processMeetEvent(event) {
-  print('You meet ' + event.description + ', he says:');
-  event.dialog.forEach(dialog => print(dialog));
+  ui.showMeetEvent(event);
 }
 
 function processFindEvent(event) {
+  ui.showFindEvent(event);
   const item = items.get(event.itemId);
-  print('You find ' + item.description);
   playerStatus.items[event.itemId] = item;
 }
 
 function processDiscoverConnectionEvent(event) {
-  print(event.description);
+  ui.showDiscoverConnectionEvent(event);
   connectLocations(playerStatus.location, event.locationId);
 }
 
@@ -154,28 +149,4 @@ function connectLocations(location, targetId) {
   targetLocation.connections.push({ to: location });
 }
 
-// Output Operations
-function print(message) {
-  console.log(message);
-}
-
-
-// Keyboard Input Operations
-
-let optionListener = null;
-
-function readOption() {
-  return new Promise (resolve => {
-    optionListener = (option) => resolve(option);
-  })
-}
-
-function keydown(keyEvent) {
-  optionListener && optionListener(parseInt(keyEvent.key, 10));
-}
-
-document.addEventListener("keydown", keydown, true);
-
-
-// Program Execution
-start();
+export default { start };
