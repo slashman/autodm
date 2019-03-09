@@ -6,32 +6,33 @@ import items from "./generators/items";
 
 import random from "./random";
 
-const targetRegions = ['darkForest', 'mountain'];
 const QUEST_TYPES = ['findPerson', 'revealItemNeeded'];
 
 let sequence = 0;
 
 export default {
-  makePlotline () {
+  makePlotline (startingLocation) {
     const plotline = [];
     let personsToFind = []; 
     let pendingItems = 2;
     const requiredItems = [];
     const firstActivity = this.buildFindPerson({
       person: persons.random(),
-      locationType: 'pub'
+      locationId: startingLocation
     });
     personsToFind.push(firstActivity.nextStep);
     plotline.push(firstActivity);
     let currentActivity = firstActivity;
+    let currentLocation = startingLocation;
     while (pendingItems > 0) {
       const nextQuestType = random.from(QUEST_TYPES);
       let nextPerson = random.from(personsToFind);
       personsToFind = personsToFind.filter(x => x !== nextPerson);
+      currentLocation = world.getLocationNear(currentLocation);
       if (!nextPerson) {
         nextPerson = {
           person: persons.random(),
-          locationType: 'pub'
+          locationId: currentLocation
         }
       }
       let nextActivity;
@@ -93,8 +94,8 @@ export default {
     // When should this event be triggered
     event.trigger = {
       type: 'enterLocation',
-      locationType: context.locationType,
-      chance: 70
+      locationId: context.locationId,
+      chance: 100
     },
     // And how should it unfold?
     event.dialog = [];
@@ -103,9 +104,9 @@ export default {
     // Add clues for upcoming points
     const nextStep = {
       person: persons.random(),
-      locationType: random.from(targetRegions)
+      locationId: world.getLocationNear(context.locationId).id
     }
-    event.dialog.push(`${nextStep.person.description} living in ${nextStep.locationType} knows the secret to kill Dracula.`);
+    event.dialog.push(`${nextStep.person.description} living in ${nextStep.locationId} knows the secret to kill Dracula.`);
     event.nextStep = nextStep;
     return event;
   },
@@ -113,14 +114,14 @@ export default {
     const person = context.person;
     const event = {
       id: sequence++,
-      description: person.description,
+      person: person,
       type: 'meet'
     }
     // When should this event be triggered
     event.trigger = {
       type: 'enterLocation',
-      locationType: context.locationType,
-      chance: 70
+      locationId: context.locationId,
+      chance: 100
     },
     // And how should it unfold?
     event.dialog = [`I am ${person.name}`];
@@ -129,7 +130,7 @@ export default {
     // Add clues for upcoming points
     const nextStep = {
       item: items.random(),
-      locationId: random.from(world.getImportantPlaces()).id
+      locationId: world.getLocationNear(context.locationId).id
     }
     event.dialog.push(`You are going to need the ${nextStep.item.description}.`);
     event.dialog.push(`It can be found in ${nextStep.locationId}`);

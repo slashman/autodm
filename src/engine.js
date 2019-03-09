@@ -35,7 +35,7 @@ function start (_ui) {
       progress: 0
     }
   ];
-  campaign.goals[0].plotline = builder.makePlotline();
+  campaign.goals[0].plotline = builder.makePlotline('lugunum');
   ui.showIntro(campaign);
   updateContext();
 }

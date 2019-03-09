@@ -1,4 +1,5 @@
 import locations from './data/locations';
+import random from './random';
 
 export default {
   getLocationsMap() {
@@ -26,6 +27,10 @@ export default {
       });
     });
     return locationsMap;
+  },
+  getLocationNear(locationId) {
+    // TODO: Compare distance
+    return random.from(locations);
   },
   getImportantPlaces() {
     return locations.filter(l => l.important === true);
