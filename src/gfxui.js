@@ -16,7 +16,8 @@ export default {
     for (let i = 0; i < 3; i++) {
       this.partyStatuses.push(new PartyStatus(game, 100 + i * 250, this.game.height, undefined));
     }
-
+    const partyMarker = this.game.add.sprite(this.game.width / 2, this.game.height / 2 - 30, 'marker');
+    partyMarker.anchor.setTo(0.5);
     this.locationTxt = this.game.add.text(50, 550, 'Location', {fill: "#000000"});
     this.eventTxt = this.game.add.text(80, 50, '', {fill: "#000000"});
   },
