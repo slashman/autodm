@@ -22,7 +22,7 @@ function start (_ui) {
   } else {
     ui = _ui;
   }
-  playerStatus.location = locationsMap.kakaka;
+  playerStatus.location = locationsMap.lugunum;
   campaign.goals = [
     {
       type: 'defeat',
