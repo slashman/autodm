@@ -13,12 +13,12 @@ export default class extends Phaser.State {
     this.load.image('map', 'assets/images/map.jpg')
     this.load.image('marker', 'assets/images/marker.png')
     this.load.image('button', 'assets/images/button.png');
-    this.load.image('female1', 'assets/images/FlareFemaleHero1.png');
-    this.load.image('female2', 'assets/images/FlareFemaleHero2.png');
-    this.load.image('female3', 'assets/images/FlareFemaleHero3.png');
-    this.load.image('male1', 'assets/images/FlareMaleHero1.png');
-    this.load.image('male2', 'assets/images/FlareMaleHero2.png');
-    this.load.image('male3', 'assets/images/FlareMaleHero3.png');
+    for (let i = 1; i <= 14; i++) {
+      this.load.image('female'+i, 'assets/images/female' + i + '.png');
+    }
+    for (let i = 1; i <= 19; i++) {
+      this.load.image('male'+i, 'assets/images/male' + i + '.png');
+    }
   }
 
   create () {
