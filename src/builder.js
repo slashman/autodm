@@ -87,7 +87,7 @@ export default {
     const person = context.person;
     const event = {
       id: sequence++,
-      description: person.description,
+      person,
       type: 'meet'
     }
     // When should this event be triggered
@@ -97,7 +97,7 @@ export default {
       chance: 70
     },
     // And how should it unfold?
-    event.dialog = [`I am ${person.name}`];
+    event.dialog = [];
     // Insert some flavor with the villain and personal context
     event.dialog.push(`Dracula killed my wife. Help me avenge her!`); //TODO
     // Add clues for upcoming points

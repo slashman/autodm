@@ -9,15 +9,21 @@ const AGES = [
 ];
 
 const GENDERS = [
-  "man", "woman"
+  "male", "female"
 ];
+
+const MALE_PICS = 19;
+const FEMALE_PICS = 14;
 
 export default {
   random() {
-    return {
+    const person = {
       name: random.from(NAMES),
-      description: `a ${random.from(AGES)} ${random.from(GENDERS)}`
+      gender: random.from(GENDERS)
     }
+    person.description = `a ${random.from(AGES)} ${(person.gender === 'male' ? 'man' : 'woman')}`;
+    person.pic = random.choice(person.gender === 'male' ? MALE_PICS : FEMALE_PICS);
+    return person;
   },
   randomName() {
     return random.from(NAMES);
