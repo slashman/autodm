@@ -1,4 +1,5 @@
 import Button from './ui/Button';
+import PartyStatus from './ui/PartyStatus';
 import items from './generators/items';
 
 export default {
@@ -8,9 +9,14 @@ export default {
 
     this.map = this.game.add.image(0, 0, 'map')
     this.buttons = [];
+    this.partyStatuses = [];
     for (let i = 0; i < 5; i++) {
       this.buttons.push(new Button(game, 850, i * 70 + 400, '-', () => this.selectOption(i + 1), undefined  ));
     }
+    for (let i = 0; i < 3; i++) {
+      this.partyStatuses.push(new PartyStatus(game, 100 + i * 250, this.game.height, undefined));
+    }
+
     this.locationTxt = this.game.add.text(50, 550, 'Location', {fill: "#000000"});
     this.eventTxt = this.game.add.text(80, 50, '', {fill: "#000000"});
   },
@@ -42,6 +48,13 @@ export default {
   showIntro(campaign) {
     campaign.goals.forEach(goal => {
       this.eventTxt.text += 'You must '+ goal.type + ' ' + goal.target;
+    });
+  },
+  updatePartyData(party) {
+    this.partyStatuses.forEach(status => status.setVisible(false));
+    party.forEach((member, i) => {
+      this.partyStatuses[i].setVisible(true);
+      this.partyStatuses[i].update(member);
     });
   },
   readOption() {

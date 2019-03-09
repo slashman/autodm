@@ -37,7 +37,7 @@ export default class extends Phaser.State {
   }
 
   create () {
-    this.game.add.text(0, 0, "hack", {font:"1px lcd", fill:"#FFFFFF"});
+    this.game.add.text(0, 0, "hack", {font:"1px Augusta", fill:"#FFFFFF"});
   }
 
   fontsLoaded() {

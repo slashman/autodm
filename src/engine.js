@@ -8,6 +8,11 @@ const locationsMap = world.getLocationsMap();
 
 const playerStatus = {
   location: null,
+  party: [
+    { name: 'Slash', gender: 'male', pic: 1 },
+    { name: 'Lali', gender: 'female', pic: 2 },
+    { name: 'Kram', gender: 'male', pic: 3 }
+  ],
   completed: {},
   items: {}
 };
@@ -49,6 +54,7 @@ function updateContext() {
   });
   ui.printLocationInfo(location, options);
   ui.readOption().then(option => selectOption(options[option - 1]));
+  ui.updatePartyData(playerStatus.party);
 }
 
 function selectOption(option) {
