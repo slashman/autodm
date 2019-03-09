@@ -21,9 +21,7 @@ export default {
       this.buttons[i].setText(option.location.name);
     });
     this.locationTxt.text = location.name;
-    this.map.x = -2599 + 1024 / 2;
-    this.map.y = -3199 + 768 / 2;
-    //TODO: Move Map
+    this.game.add.tween(this.map).to({x: -location.x + 1024 / 2, y: -location.y + 768 / 2 }, 1000, null, true)
   },
   showMeetEvent(event) {
     //TODO: Show dialog window and portrait
