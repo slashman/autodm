@@ -11,7 +11,7 @@ export default class Button {
       sprite.events.onInputDown.add(cb);
     }
 
-    this.textbox = new Phaser.Text(this.game, x, y, text, {});
+    this.textbox = new Phaser.Text(this.game, x, y, text, { font: '32px Augusta', fill: '#f4bf42', align: 'center' });
     this.textbox.anchor.setTo(0.5);
 
     this.group.add(sprite);
