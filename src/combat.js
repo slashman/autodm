@@ -4,22 +4,30 @@ import random from './random';
 let ui = null;
 let combatantIndex = 0;
 let combatants = null;
+let party = null;
 
-function combat(_ui, party) {
+function combat(_ui, _party) {
   ui = _ui;
+  party = _party;
   const enemies = [
     persons.randomEnemy(),
     persons.randomEnemy()
   ];
   combatants = party.concat(enemies);
   combatantIndex = 0;
-  return doCombat().then(victory => ui.showCombatVictory());
+  return ui.showCombatStart(enemies).then(() => doCombat()).then(victory => {
+    ui.showCombatVictory(victory);
+    return victory;
+  });
 }
 
 function doCombat() {
   const enemies = combatants.filter(c => c.enemy === true && !c.dead);
   if (enemies.length === 0) {
     return Promise.resolve(true);
+  }
+  if (party.filter(c => !c.dead).length === 0) {
+    return Promise.resolve(false); 
   }
   const currentCombatant = combatants[combatantIndex++];
   if (combatantIndex == combatants.length) {

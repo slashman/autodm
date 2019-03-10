@@ -85,8 +85,11 @@ export default {
   selectOption(index) {
     this.optionListener && this.optionListener(index);
   },
-  showCombatVictory() {
-    return this.smallPlotDialog.display('Victory!');
+  showCombatStart (enemies) {
+    return this.smallPlotDialog.display('We have been ambushed by ' + enemies.length + ' enemies!');
+  },
+  showCombatVictory(victory) {
+    return this.smallPlotDialog.display(victory ? 'Victory!' : 'Your party has been defeated...');
   },
   displayCombatAction(attacker, defender, action) {
     return this.combatDialog.display(attacker, defender, action);
