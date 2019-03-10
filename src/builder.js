@@ -3,6 +3,7 @@ import world from "./world";
 import locationsGen from "./generators/locations";
 import persons from "./generators/persons";
 import items from "./generators/items";
+import dialogMaker from "./generators/dialog";
 
 import random from "./random";
 
@@ -11,10 +12,25 @@ const QUEST_TYPES = ['findPerson', 'revealItemNeeded'];
 let sequence = 0;
 
 export default {
-  makePlotline (startingLocation) {
+  makeGoal(startingLocation) {
+    const bosses = ['boss3', 'boss2', 'boss1']; // TODO: Different types of subgoals
+    // TODO: Random bosses, with names
+    const villain = bosses[bosses.length - 1];
+    const goal = {
+      type: 'defeat',
+      villain,
+      plotline: this.makePlotline(startingLocation, bosses, villain),
+      bosses
+    };
+    return goal;
+  },
+  makePlotline (startingLocation, bosses, villain) {
     const plotline = [];
     let personsToFind = [];
-    const bosses = ['boss3', 'boss2', 'boss1']; // TODO: Different types of subgoals
+    
+    this.villain = villain;
+    this.currentBoss = bosses[0];
+
     const firstActivity = this.buildFindPerson({
       person: persons.randomPerson(),
       locationId: startingLocation
@@ -33,6 +49,7 @@ export default {
     /// End Test
 
     bosses.forEach(boss => {
+      this.currentBoss = boss;
       let pendingItems = 2;
       const requiredItems = [];
       while (pendingItems > 0) {
@@ -70,7 +87,7 @@ export default {
         locationId: currentLocation.id,
         requiredItems
       });
-      battleBossActivity.isFinalBossBattle = boss === bosses[bosses.length - 1];
+      battleBossActivity.isFinalBossBattle = boss === villain;
       plotline.push(battleBossActivity);
       currentActivity = battleBossActivity;
     });
@@ -112,13 +129,17 @@ export default {
     // And how should it unfold?
     event.dialog = [];
     // Insert some flavor with the villain and personal context
-    event.dialog.push(`Dracula killed my wife. Help me avenge her!`); //TODO
+    if (random.choice(2) === 1) {
+      event.dialog.push(dialogMaker.anecdote(this.currentBoss));
+    } else {
+      event.dialog.push(dialogMaker.anecdote(this.villain));
+    }
     // Add clues for upcoming points
     const nextStep = {
       person: persons.randomPerson(),
       locationId: world.getLocationNear(context.locationId).id
     }
-    event.dialog.push(`${nextStep.person.description} living in ${nextStep.locationId} knows the secret to kill Dracula.`);
+    event.dialog.push(dialogMaker.leadToPerson(nextStep.person, nextStep.locationId, this.currentBoss));
     event.nextStep = nextStep;
     return event;
   },
@@ -136,16 +157,19 @@ export default {
       chance: 100
     },
     // And how should it unfold?
-    event.dialog = [`I am ${person.name}`];
+    event.dialog = [];
     // Insert some flavor with the villain and personal context
-    event.dialog.push(`Dracula killed my wife. Help me avenge her!`); //TODO
+    if (random.choice(2) === 1) {
+      event.dialog.push(dialogMaker.anecdote(this.currentBoss));
+    } else {
+      event.dialog.push(dialogMaker.anecdote(this.villain));
+    }
     // Add clues for upcoming points
     const nextStep = {
       item: items.random(),
       locationId: world.getLocationNear(context.locationId).id
     }
-    event.dialog.push(`You are going to need the ${nextStep.item.description}.`);
-    event.dialog.push(`It can be found in ${nextStep.locationId}`);
+    event.dialog.push(dialogMaker.hintToFind(nextStep.item, nextStep.locationId));
     event.nextStep = nextStep;
     return event;
   },

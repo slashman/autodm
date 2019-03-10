@@ -3,7 +3,8 @@ import builder from './builder';
 import world from './world';
 import consoleui from './consoleui';
 import items from './generators/items';
-import persons from './generators/persons'
+import persons from './generators/persons';
+import dialogMaker from './generators/dialog'
 import combat from './combat';
 
 const locationsMap = world.getLocationsMap();
@@ -29,16 +30,12 @@ function start (_ui) {
   } else {
     ui = _ui;
   }
-  playerStatus.location = locationsMap.lugunum;
-  campaign.goals = [
-    {
-      type: 'defeat',
-      target: 'dracula',
-      progress: 0
-    }
-  ];
-  campaign.goals[0].plotline = builder.makePlotline('lugunum');
-  ui.showIntro(campaign).then(() => {
+  const startingLocation = world.randomLocation();
+  campaign.startingLocation = startingLocation;
+  campaign.goals = [builder.makeGoal(startingLocation.id)];
+  // TODO: More than a goal
+  playerStatus.location = startingLocation;
+  ui.showIntro(dialogMaker.campaignIntro(campaign)).then(() => {
     gotoLocation(playerStatus.location);
   });
 }

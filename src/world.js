@@ -30,6 +30,9 @@ export default {
   },
   getLocationNear(locationId) {
     // TODO: Compare distance
+    return this.randomLocation();
+  },
+  randomLocation() {
     return random.from(locations);
   },
   getImportantPlaces() {

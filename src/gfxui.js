@@ -63,12 +63,8 @@ export default {
   showDiscoverConnectionEvent(event) {
     return this.smallPlotDialog.display(event.description);
   },
-  showIntro(campaign) {
-    let text = '';
-    campaign.goals.forEach(goal => {
-      text += 'You must '+ goal.type + ' ' + goal.target;
-    });
-    return this.plotDialog.display(text);
+  showIntro(campaignIntro) {
+    return this.plotDialog.display(campaignIntro);
   },
   updatePartyData(party) {
     this.partyStatuses.forEach(status => status.setVisible(false));
