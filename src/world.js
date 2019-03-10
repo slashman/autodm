@@ -11,6 +11,9 @@ export default {
       }
     });
     locations.forEach(location => {
+      location.connections = location.connections.filter(c => {
+        return locationsMap[c.to] !== undefined;
+      });
       location.connections.forEach(connection => {
         if (connection.recyprocal) {
           return;
