@@ -69,7 +69,7 @@ function selectOption(option) {
 
 function gotoLocation(location) {
   ui.travelToLocation(location).then(() => {
-    if (random.chance(100)) {
+    if (random.chance(20)) {
       return combat(ui, playerStatus.party);
     } else {
       return true;
