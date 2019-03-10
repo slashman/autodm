@@ -44,15 +44,16 @@ function doCombat() {
   }
   return Promise.resolve()
     .then(() => {
+      const enemies = combatants.filter(c => c.enemy != currentCombatant.enemy && !c.dead);
       if (currentCombatant.isPlayer) {
-        return ui.selectCombatAction(currentCombatant);
+        return ui.selectCombatAction(currentCombatant, enemies);
       } else {
-        return selectActionFor(currentCombatant);
+        return selectActionFor(currentCombatant, enemies);
       }
     })
     .then(({ action, target }) => {
       if (action === 'nothing') {
-        return ui.displayCombatAction(combatant, undefined, combatant.name + ' does nothing.');
+        return ui.displayCombatAction(currentCombatant, undefined, currentCombatant.name + ' does nothing.');
       } else if (action === 'attack') {
         return attack(currentCombatant, target);
       }
@@ -60,11 +61,10 @@ function doCombat() {
     .then(() => doCombat());
 }
 
-function selectActionFor(combatant) {
+function selectActionFor(combatant, enemies) {
   if (combatant.dead) {
     return { action: 'dead' };
   }
-  const enemies = combatants.filter(c => c.enemy != combatant.enemy && !c.dead);
   const choice = random.choice(3);
   // TODO: Use special skill if choice === 3
   if (enemies.length === 0 /* || choice === 1 */) {

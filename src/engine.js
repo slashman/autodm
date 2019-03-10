@@ -38,7 +38,10 @@ function start (_ui) {
 }
 
 function createCharacter() {
-  return ui.showCreateCharacter().then(party => playerStatus.party = party);
+  return ui.showCreateCharacter().then(party => {
+    playerStatus.party = party;
+    party[0].isPlayer = true;
+  });
 }
 
 function updateContext() {
@@ -66,7 +69,7 @@ function selectOption(option) {
 
 function gotoLocation(location) {
   ui.travelToLocation(location).then(() => {
-    if (random.chance(20)) {
+    if (random.chance(100)) {
       return combat(ui, playerStatus.party);
     } else {
       return true;

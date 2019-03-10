@@ -7,6 +7,7 @@ import Time from './Time';
 import CombatDialog from './ui/CombatDialog';
 import Title from './ui/Title';
 import CreateCharacter from './ui/CreateCharacter';
+import CombatSelector from './ui/CombatSelector';
 
 export default {
   init(game) {
@@ -40,6 +41,7 @@ export default {
     this.title = new Title(game, undefined);
 
     this.createCharacter = new CreateCharacter(game, undefined);
+    this.combatSelector = new CombatSelector(game, 100, 50, undefined);
   },
   disableButtons() {
     this.buttons.forEach(button => button.setVisible(false));
@@ -110,5 +112,8 @@ export default {
   },
   showCreateCharacter() {
     return this.createCharacter.show();
+  },
+  selectCombatAction(person, enemies) {
+    return this.combatSelector.display(person, enemies);
   }
 }
