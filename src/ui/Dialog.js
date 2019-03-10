@@ -27,7 +27,7 @@ export default class Dialog {
         font: '24px Augusta',
         fill: '#492811',
         wordWrap: true,
-        wordWrapWidth: backgroundSprite.width - 2 * DIALOG_BORDER - PORTRAIT_WIDTH - PORTRAIT_PADDING,
+        wordWrapWidth: backgroundSprite.width - 2 * DIALOG_BORDER - PORTRAIT_WIDTH - 2 * PORTRAIT_PADDING,
       }
     );
 
@@ -39,7 +39,7 @@ export default class Dialog {
     this.portrait.update(conversation.person);
     // TODO: Display conversation.person.description somewhere?
     let text = '';
-    conversation.dialog.forEach(dialog => text += dialog + '\n');
+    conversation.dialog.forEach(dialog => text += dialog + '\n\n');
     this.dialogTextbox.text = text; 
     this.group.visible = true;
     return new Promise(r => {
