@@ -19,9 +19,9 @@ export default {
     this.buttons = [];
     this.partyStatuses = [];
     for (let i = 0; i < 5; i++) {
-      this.buttons.push(new Button(game, 850, i * 70 + 400, '-', () => this.selectOption(i + 1), undefined  ));
+      this.buttons.push(new Button(game, 850, i * 70 + 100, '-', () => this.selectOption(i + 1), undefined  ));
     }
-    this.locationTxt = this.game.add.text(850, 340, '', { font: '32px Augusta', fill: '#f4bf42', align: 'center' });
+    this.locationTxt = this.game.add.text(850, 40, '', { font: '32px Augusta', fill: '#f4bf42', align: 'center' });
     this.locationTxt.anchor.setTo(0.5);
     this.locationTxt.stroke = "#995900";
     this.locationTxt.strokeThickness = 8;
