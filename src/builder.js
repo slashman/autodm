@@ -17,7 +17,7 @@ export default {
     let pendingItems = 2;
     const requiredItems = [];
     const firstActivity = this.buildFindPerson({
-      person: persons.random(),
+      person: persons.randomPerson(),
       locationId: startingLocation
     });
     personsToFind.push(firstActivity.nextStep);
@@ -31,7 +31,7 @@ export default {
       currentLocation = world.getLocationNear(currentLocation);
       if (!nextPerson) {
         nextPerson = {
-          person: persons.random(),
+          person: persons.randomPerson(),
           locationId: currentLocation
         }
       }
@@ -103,7 +103,7 @@ export default {
     event.dialog.push(`Dracula killed my wife. Help me avenge her!`); //TODO
     // Add clues for upcoming points
     const nextStep = {
-      person: persons.random(),
+      person: persons.randomPerson(),
       locationId: world.getLocationNear(context.locationId).id
     }
     event.dialog.push(`${nextStep.person.description} living in ${nextStep.locationId} knows the secret to kill Dracula.`);

@@ -11,9 +11,9 @@ const locationsMap = world.getLocationsMap();
 const playerStatus = {
   location: null,
   party: [
-    persons.buildPartyMember({ name: 'Slash', gender: 'male', attack: 10, defense: 5, hp: 5, pic: 7, age: 'middle-aged' }),
-    persons.buildPartyMember({ name: 'Lali', gender: 'female', attack: 5, defense: 10, hp: 3, pic: 3, age: 'middle-aged' }),
-    persons.buildPartyMember({ name: 'Kram', gender: 'male', attack: 15, defense: 3, hp: 3, pic: 10, age: 'young' })
+    persons.buildPartyMember({ name: 'Slash', gender: 'male', attack: 10, defense: 5, hp: 5, pic: 'male7', age: 'middle-aged' }),
+    persons.buildPartyMember({ name: 'Lali', gender: 'female', attack: 5, defense: 10, hp: 3, pic: 'female3', age: 'middle-aged' }),
+    persons.buildPartyMember({ name: 'Kram', gender: 'male', attack: 15, defense: 3, hp: 3, pic: 'male10', age: 'young' })
   ],
   completed: {},
   items: {}
@@ -68,7 +68,7 @@ function selectOption(option) {
 
 function gotoLocation(location) {
   ui.travelToLocation(location).then(() => {
-    if (random.chance(20)) {
+    if (random.chance(100)) {
       return combat(ui, playerStatus.party);
     } else {
       return true;

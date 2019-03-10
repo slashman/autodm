@@ -22,6 +22,11 @@ export default class extends Phaser.State {
     for (let i = 1; i <= 19; i++) {
       this.load.image('male'+i, 'assets/images/male' + i + '.png');
     }
+    const enemies = [
+      'dragon', 'goblin', 'harpy', 'lichlord', 'lordofViolence', 'naga', 'orc', 'ratman', 
+      'treefolk', 'troll', 'boss1', 'boss2', 'boss3'
+    ];
+    enemies.forEach(e => this.load.image(e, 'assets/images/' + e + '.png'))
   }
 
   create () {
