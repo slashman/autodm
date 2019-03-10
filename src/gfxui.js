@@ -1,6 +1,7 @@
 import Button from './ui/Button';
 import PartyStatus from './ui/PartyStatus';
 import Dialog from './ui/Dialog';
+import PlotDialog from './ui/PlotDialog';
 import items from './generators/items';
 
 export default {
@@ -23,6 +24,8 @@ export default {
     
     this.locationTxt = this.game.add.text(50, 550, 'Location', {fill: "#000000"});
     this.eventTxt = this.game.add.text(80, 50, '', {fill: "#000000"});
+
+    this.plotDialog = new PlotDialog(game, 100, 50, undefined)
     
   },
   printLocationInfo(location, options) {
@@ -47,9 +50,11 @@ export default {
     this.eventTxt.text += '\n' + event.description;
   },
   showIntro(campaign) {
+    let text = '';
     campaign.goals.forEach(goal => {
-      this.eventTxt.text += 'You must '+ goal.type + ' ' + goal.target;
+      text += 'You must '+ goal.type + ' ' + goal.target;
     });
+    return this.plotDialog.display(text);
   },
   updatePartyData(party) {
     this.partyStatuses.forEach(status => status.setVisible(false));

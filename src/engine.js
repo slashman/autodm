@@ -31,14 +31,15 @@ function start (_ui) {
   campaign.goals = [
     {
       type: 'defeat',
-      villain: 'dracula',
+      target: 'dracula',
       progress: 0
     }
   ];
   campaign.goals[0].plotline = builder.makePlotline('lugunum');
-  ui.showIntro(campaign);
-  enterLocation(playerStatus.location);
-  updateContext();
+  ui.showIntro(campaign).then(() => {
+    enterLocation(playerStatus.location);
+    updateContext();
+  });
 }
 
 function updateContext() {
