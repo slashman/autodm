@@ -1,4 +1,5 @@
 import random from "../random";
+import Mob from '../Mob';
 
 const NAMES = [
   "Louis", "Lane", "Lili", "Lulu", "Kale", "Glenn", "Michael", "Ken", "Arnold", "Kornel", "Jeff"
@@ -17,12 +18,25 @@ const FEMALE_PICS = 14;
 
 export default {
   random() {
-    const person = {
+    const gender = random.from(GENDERS);
+    const pic = random.choice(gender === 'male' ? MALE_PICS : FEMALE_PICS);
+    const person = this.buildPerson({
       name: random.from(NAMES),
-      gender: random.from(GENDERS)
-    }
-    person.description = `a ${random.from(AGES)} ${(person.gender === 'male' ? 'man' : 'woman')}`;
-    person.pic = random.choice(person.gender === 'male' ? MALE_PICS : FEMALE_PICS);
+      gender,
+      attack: random.choice(10) + 5,
+      defense: random.choice(10) + 5,
+      hp: random.choice(50) + 20,
+      pic,
+      age: random.from(AGES)
+    });
+    return person;
+  },
+  buildPerson(attributes) {
+    return new Mob(attributes);
+  },
+  buildPartyMember (attributes) {
+    const person = this.buildPerson(attributes);
+    person.enemy = false;
     return person;
   },
   randomEnemy() {

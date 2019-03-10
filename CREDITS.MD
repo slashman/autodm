@@ -1,3 +1,7 @@
 https://opengameart.org/content/rpg-gui-construction-kit-v10
 https://opengameart.org/content/flare-portrait-pack-number-one
 https://www.dafont.com/es/augusta.font
+https://www.dafont.com/es/offenbacherschwabachercat.font?text=0123456789
+https://opengameart.org/content/fantasy-ui-elements-by-ravenmore
+https://opengameart.org/content/weapon-icons-32x32px-painterly
+https://opengameart.org/content/armor-icons-32x32-px-painterly

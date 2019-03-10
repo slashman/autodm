@@ -27,7 +27,7 @@ export default {
 
     this.dialog = new Dialog(game, 100, 50, undefined)
     for (let i = 0; i < 3; i++) {
-      this.partyStatuses.push(new PartyStatus(game, 100 + i * 250, this.game.height, undefined));
+      this.partyStatuses.push(new PartyStatus(game, 150 + i * 300, this.game.height, undefined));
     }
 
     this.plotDialog = new PlotDialog(game, 100, 50, 'dialog', undefined);

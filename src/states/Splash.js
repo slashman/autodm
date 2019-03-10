@@ -11,6 +11,8 @@ export default class extends Phaser.State {
     this.load.image('blank', 'assets/images/blank.png')
     this.load.image('map', 'assets/images/map.jpg')
     this.load.image('marker', 'assets/images/marker.png')
+    this.load.image('atk', 'assets/images/atk.png')
+    this.load.image('def', 'assets/images/def.png')
     this.load.image('button', 'assets/images/button.png');
     this.load.image('dialog', 'assets/images/dialog.png');
     this.load.image('dialog2', 'assets/images/dialog2.png');

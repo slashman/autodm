@@ -3,6 +3,7 @@ import builder from './builder';
 import world from './world';
 import consoleui from './consoleui';
 import items from './generators/items';
+import persons from './generators/persons'
 import combat from './combat';
 
 const locationsMap = world.getLocationsMap();
@@ -10,9 +11,9 @@ const locationsMap = world.getLocationsMap();
 const playerStatus = {
   location: null,
   party: [
-    { name: 'Slash', gender: 'male', pic: 1 },
-    { name: 'Lali', gender: 'female', pic: 2 },
-    { name: 'Kram', gender: 'male', pic: 3 }
+    persons.buildPartyMember({ name: 'Slash', gender: 'male', attack: 10, defense: 5, hp: 500, pic: 7, age: 'middle-aged' }),
+    persons.buildPartyMember({ name: 'Lali', gender: 'female', attack: 5, defense: 10, hp: 300, pic: 3, age: 'middle-aged' }),
+    persons.buildPartyMember({ name: 'Kram', gender: 'male', attack: 15, defense: 3, hp: 300, pic: 10, age: 'young' })
   ],
   completed: {},
   items: {}
