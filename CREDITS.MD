@@ -5,3 +5,5 @@ https://www.dafont.com/es/offenbacherschwabachercat.font?text=0123456789
 https://opengameart.org/content/fantasy-ui-elements-by-ravenmore
 https://opengameart.org/content/weapon-icons-32x32px-painterly
 https://opengameart.org/content/armor-icons-32x32-px-painterly
+https://opengameart.org/content/kujasa-the-beginning
+https://www.dafont.com/es/deutsch-gothic.font

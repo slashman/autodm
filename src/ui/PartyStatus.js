@@ -32,6 +32,7 @@ export default class PartyStatus {
   }
   update(partyMember) {
     this.setVisible(true);
+    this.person = partyMember;
     this.portraitSprite.loadTexture(partyMember.pic);
     this.nameTextbox.text = partyMember.name;
     this.hpTextbox.text = partyMember.hp.getText();

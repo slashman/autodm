@@ -11,11 +11,7 @@ const locationsMap = world.getLocationsMap();
 
 const playerStatus = {
   location: null,
-  party: [
-    persons.buildPartyMember({ name: 'Slash', gender: 'male', attack: 20, defense: 5, hp: 100, pic: 'male7', age: 'middle-aged' }),
-    persons.buildPartyMember({ name: 'Lali', gender: 'female', attack: 10, defense: 10, hp: 50, pic: 'female3', age: 'middle-aged' }),
-    persons.buildPartyMember({ name: 'Kram', gender: 'male', attack: 30, defense: 3, hp: 70, pic: 'male10', age: 'young' })
-  ],
+  party: [],
   completed: {},
   items: {}
 };
@@ -36,8 +32,13 @@ function start (_ui) {
   // TODO: More than a goal
   playerStatus.location = startingLocation;
   ui.showTitle()
+    .then(() => createCharacter())
     .then(() => ui.showIntro(dialogMaker.campaignIntro(campaign)))
     .then(() => gotoLocation(playerStatus.location));
+}
+
+function createCharacter() {
+  return ui.showCreateCharacter().then(party => playerStatus.party = party);
 }
 
 function updateContext() {

@@ -34,16 +34,18 @@ const MALE_PICS = 19;
 const FEMALE_PICS = 14;
 
 export default {
+  getPicForGender(gender) {
+    return gender + random.choice(gender === 'male' ? MALE_PICS : FEMALE_PICS);
+  },
   randomPerson() {
     const gender = random.from(GENDERS);
-    const pic = random.choice(gender === 'male' ? MALE_PICS : FEMALE_PICS);
     const person = this.buildPerson({
       name: this.randomName(),
       gender,
       attack: random.choice(10) + 5,
       defense: random.choice(10) + 5,
       hp: random.choice(50) + 20,
-      pic: gender + pic,
+      pic: this.getPicForGender(gender),
       age: random.from(AGES)
     });
     return person;
@@ -71,6 +73,11 @@ export default {
     });
     enemy.enemy = true;
     return enemy;
+  },
+  rollPartyMember() {
+    const person = this.randomPerson();
+    person.enemy = false;
+    return person;
   },
   randomName() {
     //return random.from(NAMES);

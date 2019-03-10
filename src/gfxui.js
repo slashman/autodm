@@ -6,6 +6,7 @@ import items from './generators/items';
 import Time from './Time';
 import CombatDialog from './ui/CombatDialog';
 import Title from './ui/Title';
+import CreateCharacter from './ui/CreateCharacter';
 
 export default {
   init(game) {
@@ -37,6 +38,8 @@ export default {
     this.disableButtons();
 
     this.title = new Title(game, undefined);
+
+    this.createCharacter = new CreateCharacter(game, undefined);
   },
   disableButtons() {
     this.buttons.forEach(button => button.setVisible(false));
@@ -103,5 +106,8 @@ export default {
   },
   showTitle() {
     return this.title.show();
+  },
+  showCreateCharacter() {
+    return this.createCharacter.show();
   }
 }
