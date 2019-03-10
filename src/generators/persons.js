@@ -1,5 +1,7 @@
 import random from "../random";
 import Mob from '../Mob';
+// import fantasyNames from 'fantasy-names';
+import nameGenerator from './name_generator';
 
 const NAMES = [
   "Louis", "Lane", "Lili", "Lulu", "Kale", "Glenn", "Michael", "Ken", "Arnold", "Kornel", "Jeff"
@@ -36,7 +38,7 @@ export default {
     const gender = random.from(GENDERS);
     const pic = random.choice(gender === 'male' ? MALE_PICS : FEMALE_PICS);
     const person = this.buildPerson({
-      name: random.from(NAMES),
+      name: this.randomName(),
       gender,
       attack: random.choice(10) + 5,
       defense: random.choice(10) + 5,
@@ -71,12 +73,14 @@ export default {
     return enemy;
   },
   randomName() {
-    return random.from(NAMES);
+    //return random.from(NAMES);
+    //return fantasyNames('diablo', 'demons', 1);
+    return nameGenerator('egyptian');
   },
   randomBoss() {
     const mob = this.randomEnemy();
     mob.pic = random.from(BOSS_PICS);
-    mob.name = random.from(NAMES);
+    mob.name = this.randomName();
     return mob;
   }
 }
