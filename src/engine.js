@@ -37,6 +37,7 @@ function start (_ui) {
   ];
   campaign.goals[0].plotline = builder.makePlotline('lugunum');
   ui.showIntro(campaign);
+  enterLocation(playerStatus.location);
   updateContext();
 }
 
