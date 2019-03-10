@@ -41,9 +41,9 @@ export default class CombatDialog {
     this.portrait1.update(attacker);
     if (defender) {
       this.portrait2.update(defender);
-      this.portrait2.visible = true;
+      this.portrait2.setVisible(true);
     } else {
-      this.portrait2.visible = false;
+      this.portrait2.setVisible(false);
     }
     this.dialogTextbox.text = action; 
     this.group.visible = true;
