@@ -11,9 +11,9 @@ const locationsMap = world.getLocationsMap();
 const playerStatus = {
   location: null,
   party: [
-    persons.buildPartyMember({ name: 'Slash', gender: 'male', attack: 10, defense: 5, hp: 5, pic: 'male7', age: 'middle-aged' }),
-    persons.buildPartyMember({ name: 'Lali', gender: 'female', attack: 5, defense: 10, hp: 3, pic: 'female3', age: 'middle-aged' }),
-    persons.buildPartyMember({ name: 'Kram', gender: 'male', attack: 15, defense: 3, hp: 3, pic: 'male10', age: 'young' })
+    persons.buildPartyMember({ name: 'Slash', gender: 'male', attack: 1000, defense: 5, hp: 500, pic: 'male7', age: 'middle-aged' }),
+    persons.buildPartyMember({ name: 'Lali', gender: 'female', attack: 500, defense: 10, hp: 300, pic: 'female3', age: 'middle-aged' }),
+    persons.buildPartyMember({ name: 'Kram', gender: 'male', attack: 1500, defense: 3, hp: 300, pic: 'male10', age: 'young' })
   ],
   completed: {},
   items: {}
@@ -68,22 +68,25 @@ function selectOption(option) {
 
 function gotoLocation(location) {
   ui.travelToLocation(location).then(() => {
-    if (random.chance(100)) {
+    if (random.chance(0)) {
       return combat(ui, playerStatus.party);
     } else {
       return true;
     }
   }).then((alive) => {
     if (alive) {
-      enterLocation(location);
-      updateContext();
+      return enterLocation(location).then(() => {
+        updateContext();
+      });
     }
   });
 }
 
+let pendingEvents;
 function enterLocation(location) {
   playerStatus.location = location;
   const potentialEvents = filterEventsByType('enterLocation');
+  pendingEvents = [];
   potentialEvents.forEach(event => {
     if (playerStatus.gameOver) {
       return;
@@ -108,9 +111,22 @@ function enterLocation(location) {
           return;
         }
       }
-      processEvent(event);
+      pendingEvents.push(event);
     }
   });
+  return processPendingEvents();
+}
+
+function processPendingEvents() {
+  if (playerStatus.gameOver) {
+    return Promise.resolve();
+  }
+  const event = pendingEvents.shift();
+  if (event) {
+    return processEvent(event).then(() => processPendingEvents());
+  } else {
+    return Promise.resolve();
+  }
 }
 
 function filterEventsByType(triggerType) {
@@ -132,32 +148,51 @@ function filterEventsByType(triggerType) {
 }
 
 function processEvent(event) {
-  if (event.type === 'meet') {
-    processMeetEvent(event);
-  } else if (event.type === 'find') {
-    processFindEvent(event);
-  } else if (event.type === 'discoverConnection') {
-    processDiscoverConnectionEvent(event);
-  }
-  playerStatus.completed[event.id] = true;
-  if (event.gameOver) {
-    playerStatus.gameOver = true;
-  }
+  return Promise.resolve().then(() => {
+    if (event.type === 'meet') {
+      return processMeetEvent(event);
+    } else if (event.type === 'battle') {
+      return processBattleEvent(event);
+    } else if (event.type === 'find') {
+      return processFindEvent(event);
+    } else if (event.type === 'discoverConnection') {
+      return processDiscoverConnectionEvent(event);
+    }
+  }).then(() => {
+    playerStatus.completed[event.id] = true;
+    if (event.gameOver) {
+      playerStatus.gameOver = true;
+    }
+  });
 }
 
 function processMeetEvent(event) {
-  ui.showMeetEvent(event);
+  return ui.showMeetEvent(event);
+}
+
+function processBattleEvent(event) {
+  return ui.showMeetEvent(event).then(() => {
+    return combat(ui, playerStatus.party, event.person);
+  }).then(() => {
+    if (event.isBossBattle) {
+      return ui.showBossDefeated(event.person);
+    }
+  }).then(() => {
+    if (event.isFinalBossBattle) {
+      playerStatus.gameOver = true;
+    }
+  });
 }
 
 function processFindEvent(event) {
-  ui.showFindEvent(event);
   const item = items.get(event.itemId);
   playerStatus.items[event.itemId] = item;
+  return ui.showFindEvent(event);
 }
 
 function processDiscoverConnectionEvent(event) {
-  ui.showDiscoverConnectionEvent(event);
   connectLocations(playerStatus.location, event.locationId);
+  return ui.showDiscoverConnectionEvent(event);
 }
 
 function connectLocations(location, targetId) {

@@ -6,18 +6,27 @@ let combatantIndex = 0;
 let combatants = null;
 let party = null;
 
-function combat(_ui, _party) {
+function combat(_ui, _party, _enemies) {
   ui = _ui;
   party = _party;
-  const enemies = [
-    persons.randomEnemy(),
-    persons.randomEnemy()
-  ];
+  let enemies;
+  if (_enemies) {
+    if (_enemies.length) {
+      enemies = _enemies;
+    } else {
+      enemies = [_enemies];
+    }
+  } else {
+    enemies = [];
+  }
+  const padding = random.choice(party.length - enemies.length);
+  for (let i = 0; i < padding; i++) {
+    enemies.push(persons.randomEnemy())
+  }
   combatants = party.concat(enemies);
   combatantIndex = 0;
   return ui.showCombatStart(enemies).then(() => doCombat()).then(victory => {
-    ui.showCombatVictory(victory);
-    return victory;
+    return ui.showCombatVictory(victory).then(() => victory);
   });
 }
 

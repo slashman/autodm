@@ -13,9 +13,8 @@ let sequence = 0;
 export default {
   makePlotline (startingLocation) {
     const plotline = [];
-    let personsToFind = []; 
-    let pendingItems = 2;
-    const requiredItems = [];
+    let personsToFind = [];
+    const bosses = ['boss3', 'boss2', 'boss1']; // TODO: Different types of subgoals
     const firstActivity = this.buildFindPerson({
       person: persons.randomPerson(),
       locationId: startingLocation
@@ -24,65 +23,78 @@ export default {
     plotline.push(firstActivity);
     let currentActivity = firstActivity;
     let currentLocation = startingLocation;
-    while (pendingItems > 0) {
-      const nextQuestType = random.from(QUEST_TYPES);
-      let nextPerson = random.from(personsToFind);
-      personsToFind = personsToFind.filter(x => x !== nextPerson);
-      currentLocation = world.getLocationNear(currentLocation);
-      if (!nextPerson) {
-        nextPerson = {
-          person: persons.randomPerson(),
-          locationId: currentLocation
+
+    //// Test
+    /*plotline.push(this.buildBattleMob({
+      person: persons.createMob('boss1'),
+      locationId: currentLocation
+    }));
+    */
+    /// End Test
+
+    bosses.forEach(boss => {
+      let pendingItems = 2;
+      const requiredItems = [];
+      while (pendingItems > 0) {
+        const nextQuestType = random.from(QUEST_TYPES);
+        let nextPerson = random.from(personsToFind);
+        personsToFind = personsToFind.filter(x => x !== nextPerson);
+        currentLocation = world.getLocationNear(currentLocation);
+        if (!nextPerson) {
+          nextPerson = {
+            person: persons.randomPerson(),
+            locationId: currentLocation.id
+          }
         }
+        let nextActivity;
+        if (nextQuestType === 'findPerson') {
+          nextActivity = this.buildFindPerson(nextPerson);
+          nextActivity.requires = currentActivity.id;
+          plotline.push(nextActivity);
+          personsToFind.push(nextActivity.nextStep);
+        } else if (nextQuestType === 'revealItemNeeded') {
+          nextActivity = this.buildRevealItemNeeded(nextPerson);
+          nextActivity.requires = currentActivity.id;
+          plotline.push(nextActivity);
+          const findItemActivity = this.buildFindItem(nextActivity.nextStep);
+          requiredItems.push(nextActivity.nextStep.item.id)
+          findItemActivity.requires = nextActivity.id;
+          plotline.push(findItemActivity);
+          pendingItems--;
+        }
+        currentActivity = nextActivity;
       }
-      let nextActivity;
-      if (nextQuestType === 'findPerson') {
-        nextActivity = this.buildFindPerson(nextPerson);
-        nextActivity.requires = currentActivity.id;
-        plotline.push(nextActivity);
-        personsToFind.push(nextActivity.nextStep);
-      } else if (nextQuestType === 'revealItemNeeded') {
-        nextActivity = this.buildRevealItemNeeded(nextPerson);
-        nextActivity.requires = currentActivity.id;
-        plotline.push(nextActivity);
-        const findItemActivity = this.buildFindItem(nextActivity.nextStep);
-        requiredItems.push(nextActivity.nextStep.item.id)
-        findItemActivity.requires = nextActivity.id;
-        plotline.push(findItemActivity);
-        pendingItems--;
-      }
-      currentActivity = nextActivity;
-    }
-    plotline.push({
-      id: 'killDracula',
-      trigger: {
-        type: 'enterLocation',
-        locationId: 'draculaHall',
-        hasItems: requiredItems
-      },
-      type: 'meet',
-      description: 'Dracula',
-      dialog: [
-        'Argh! It\'s the ancient items!',
-        'I dieeee!!!!'
-      ],
-      gameOver: true
-    });
-    plotline.push({
-      id: 'deathByDracula',
-      trigger: {
-        type: 'enterLocation',
-        locationId: 'draculaHall'
-      },
-      type: 'meet',
-      description: 'Dracula',
-      dialog: [
-        'Die, puny human!'
-      ],
-      gameOver: true
+      currentLocation = world.getLocationNear(currentLocation);
+      const battleBossActivity = this.buildBattleMob({
+        person: persons.createMob(boss),
+        locationId: currentLocation.id,
+        requiredItems
+      });
+      battleBossActivity.isFinalBossBattle = boss === bosses[bosses.length - 1];
+      plotline.push(battleBossActivity);
+      currentActivity = battleBossActivity;
     });
     console.log(plotline);
     return plotline;
+  },
+  buildBattleMob(context) {
+    const person = context.person;
+    const event = {
+      id: sequence++,
+      person,
+      type: 'battle',
+      gameOver: context.endBoss === true
+    }
+    event.trigger = {
+      type: 'enterLocation',
+      locationId: context.locationId,
+      chance: 100,
+      hasItems: context.requiredItems
+    },
+    event.dialog = [];
+    event.dialog.push(`Prepare to die!`); //TODO
+    event.isBossBattle = true;
+    return event;
   },
   buildFindPerson(context) {
     const person = context.person;

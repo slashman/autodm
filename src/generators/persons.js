@@ -70,5 +70,10 @@ export default {
   },
   randomName() {
     return random.from(NAMES);
+  },
+  createMob(id) {
+    const mob = this.randomEnemy();
+    mob.pic = id;
+    return mob;
   }
 }

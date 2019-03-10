@@ -42,8 +42,12 @@ export default class Dialog {
     conversation.dialog.forEach(dialog => text += dialog + '\n');
     this.dialogTextbox.text = text; 
     this.group.visible = true;
+    return new Promise(r => {
+      this.hideCb = r;
+    });
   }
   hide() {
     this.group.visible = false;
+    this.hideCb && this.hideCb();
   }
 }

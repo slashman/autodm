@@ -54,7 +54,7 @@ export default {
     return Time.wait(1500);
   },
   showMeetEvent(event) {
-    this.dialog.display(event);
+    return this.dialog.display(event);
   },
   showFindEvent(event) {
     const item = items.get(event.itemId);
@@ -86,6 +86,8 @@ export default {
     this.optionListener && this.optionListener(index);
   },
   showCombatStart (enemies) {
+    this.disableButtons();
+    this.locationTxt.visible = false;
     return this.smallPlotDialog.display('We have been ambushed by ' + enemies.length + ' enemies!');
   },
   showCombatVictory(victory) {
@@ -94,4 +96,10 @@ export default {
   displayCombatAction(attacker, defender, action) {
     return this.combatDialog.display(attacker, defender, action);
   },
+  showBossDefeated(boss) {
+    return this.dialog.display({
+      person: boss,
+      dialog: ['How could this happen!']
+    });
+  }
 }
