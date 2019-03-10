@@ -42,26 +42,36 @@ function doCombat() {
   if (combatantIndex == combatants.length) {
     combatantIndex = 0;
   }
-  if (currentCombatant.isPlayer) {
-
-  } else {
-    return combatTurn(currentCombatant).then(() => doCombat());
-  }
+  return Promise.resolve()
+    .then(() => {
+      if (currentCombatant.isPlayer) {
+        return ui.selectCombatAction(currentCombatant);
+      } else {
+        return selectActionFor(currentCombatant);
+      }
+    })
+    .then(({ action, target }) => {
+      if (action === 'nothing') {
+        return ui.displayCombatAction(combatant, undefined, combatant.name + ' does nothing.');
+      } else if (action === 'attack') {
+        return attack(currentCombatant, target);
+      }
+    })
+    .then(() => doCombat());
 }
 
-function combatTurn(combatant) {
+function selectActionFor(combatant) {
   if (combatant.dead) {
-    return Promise.resolve();
+    return { action: 'dead' };
   }
   const enemies = combatants.filter(c => c.enemy != combatant.enemy && !c.dead);
   const choice = random.choice(3);
+  // TODO: Use special skill if choice === 3
   if (enemies.length === 0 /* || choice === 1 */) {
     // Do nothing
-    return ui.displayCombatAction(combatant, undefined, combatant.name + ' does nothing.');
+    return { action: 'nothing' };
   } else {
-    const target = random.from(enemies);
-    // TODO: Use special skill if choice === 3
-    return attack(combatant, target);
+    return { action: 'attack', target: random.from(enemies) };
   }
 }
 
