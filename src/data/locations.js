@@ -2,30 +2,19 @@ export default [
   {
     id: 'lugunum',
     name: 'Lugunum',
-    type: 'plaza',
-    important: true,
+    type: 'town',
     x: 2599,
     y: 3199,
     connections: [
       {
-        to: 'lugunumPub'
-      },
-      {
-        to: 'forestRoad1'
+        to: 'lugunumForest'
       }
     ]
   },
   {
-    id: 'lugunumPub',
-    name: 'Pub',
-    important: true,
-    type: 'pub',
-    x: 2599,
-    y: 3199
-  },
-  {
-    id: 'forestRoad1',
-    name: 'Forest Road 1',
+    id: 'lugunumForest',
+    name: 'Lugunum Forest',
+    type: 'forest',
     x: 2576,
     y: 3247,
     connections: [
@@ -33,34 +22,21 @@ export default [
         to: 'agrorum'
       },
       {
-        to: 'forestRoad2'
+        to: 'borumForest'
       }
     ]
   },
   {
     id: 'agrorum',
     name: 'Agrorum',
-    type: 'plaza',
+    type: 'town',
     x: 2622,
-    y: 3243,
-    important: true,
-    connections: [
-      {
-        to: 'agrorumPub'
-      }
-    ]
+    y: 3243
   },
   {
-    id: 'agrorumPub',
-    name: 'Pub',
-    x: 2622,
-    y: 3243,
-    important: true,
-    type: 'pub'
-  },
-  {
-    id: 'forestRoad2',
-    name: 'Forest Road 2',
+    id: 'borumForest',
+    name: 'Borum Forest',
+    type: 'forest',
     x: 2529,
     y: 3275,
     connections: [
@@ -75,17 +51,15 @@ export default [
   {
     id: 'aqugus',
     name: 'Aqugus',
-    type: 'plaza',
+    type: 'town',
     x: 2643,
-    y: 3380,
-    important: true
+    y: 3380
   },
   {
     id: 'borum',
     name: 'Borum',
-    type: 'plaza',
+    type: 'town',
     x: 2472,
-    y: 3266,
-    important: true
+    y: 3266
   },
 ];
