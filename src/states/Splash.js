@@ -8,6 +8,7 @@ export default class extends Phaser.State {
     this.loaderBar = this.add.sprite(this.game.world.centerX, this.game.world.centerY, 'loaderBar')
     this.load.setPreloadSprite(this.loaderBar)
     
+    this.load.image('blank', 'assets/images/blank.png')
     this.load.image('map', 'assets/images/map.jpg')
     this.load.image('marker', 'assets/images/marker.png')
     this.load.image('button', 'assets/images/button.png');

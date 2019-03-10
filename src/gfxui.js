@@ -18,16 +18,20 @@ export default {
     for (let i = 0; i < 5; i++) {
       this.buttons.push(new Button(game, 850, i * 70 + 400, '-', () => this.selectOption(i + 1), undefined  ));
     }
+    this.locationTxt = this.game.add.text(850, 340, '', { font: '32px Augusta', fill: '#f4bf42', align: 'center' });
+    this.locationTxt.anchor.setTo(0.5);
+    this.locationTxt.stroke = "#995900";
+    this.locationTxt.strokeThickness = 8;
+    this.locationTxt.setShadow(2, 2, "#333333", 2, true, false);
+
     this.dialog = new Dialog(game, 100, 50, undefined)
     for (let i = 0; i < 3; i++) {
       this.partyStatuses.push(new PartyStatus(game, 100 + i * 250, this.game.height, undefined));
     }
-    
-    this.locationTxt = this.game.add.text(50, 550, 'Location', {fill: "#000000"});
 
-    this.plotDialog = new PlotDialog(game, 100, 50, 'dialog', undefined)
-    this.smallPlotDialog = new PlotDialog(game, 100, 50, 'dialog2', undefined)
-    
+    this.plotDialog = new PlotDialog(game, 100, 50, 'dialog', undefined);
+    this.smallPlotDialog = new PlotDialog(game, 100, 50, 'dialog2', undefined);
+    this.disableButtons();
   },
   disableButtons() {
     this.buttons.forEach(button => button.setVisible(false));
@@ -38,10 +42,12 @@ export default {
       this.buttons[i].setText(option.location.name);
     });
     this.locationTxt.text = location.name;
+    this.locationTxt.visible = true;
   },
   travelToLocation(location) {
     // TODO: Calculate time based on distance to travel
     this.disableButtons();
+    this.locationTxt.visible = false;
     this.game.add.tween(this.map).to({x: -location.x + 1024 / 2, y: -location.y + 768 / 2 }, 1000, null, true)
     return Time.wait(1500);
   },
