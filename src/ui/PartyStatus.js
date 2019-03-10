@@ -11,14 +11,14 @@ export default class PartyStatus {
     this.portraitSprite.anchor.setTo(0.5, 1);
     this.nameTextbox = textBuilder.makeText(this.game, x, y, '#f4bf42', '#995900');
 
-    const atkIcon = new Phaser.Sprite(this.game, x - 100, y - 55, 'atk');
+    const atkIcon = new Phaser.Sprite(this.game, x - 125, y - 85, 'atk');
     atkIcon.anchor.setTo(0.5);
-    const defIcon = new Phaser.Sprite(this.game, x - 100, y - 25, 'def');
+    const defIcon = new Phaser.Sprite(this.game, x - 125, y - 55, 'def');
     defIcon.anchor.setTo(0.5);
 
-    this.atkTextbox = textBuilder.makeStatText(this.game, atkIcon.x + 30, y - 35, '#ffffff', '#9e0000');
-    this.defTextbox = textBuilder.makeStatText(this.game, defIcon.x + 30, y - 5, '#ffffff', '#9e0000');
-    this.hpTextbox = textBuilder.makeStatText(this.game, x + 100, y - 5, '#ffffff', '#9e0000');
+    this.atkTextbox = textBuilder.makeStatText(this.game, atkIcon.x + 30, y - 65, '#ffffff', '#9e0000');
+    this.defTextbox = textBuilder.makeStatText(this.game, defIcon.x + 30, y - 35, '#ffffff', '#9e0000');
+    this.hpTextbox = textBuilder.makeStatText(this.game, x + 110, y - 35, '#ffffff', '#9e0000');
 
     this.group.add(this.portraitSprite);
     this.group.add(this.nameTextbox);
