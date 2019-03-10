@@ -28,7 +28,7 @@ export default {
     if (bosses.length > 1) {
       text += ', along with his ';
       if (bosses.length === 2) {
-        text += 'minion, ' + bosses[1].name;
+        text += 'minion, ' + bosses[0].name;
       } else {
         text += 'minions, ';
         bosses.forEach((boss, i) => {
