@@ -1,10 +1,11 @@
 import PartyStatus from './PartyStatus';
+import PlotDialog from './PlotDialog';
 
 const DIALOG_BORDER = 40;
 const PORTRAIT_HEIGHT = 300;
 const PORTRAIT_WIDTH = 300;
 const DIALOG_PADDING = 40;
-const PORTRAIT_PADDING = 5;
+const PORTRAIT_PADDING = 40;
 
 export default class CombatDialog {
   constructor(game, x, y, parentGroup) {
@@ -17,24 +18,11 @@ export default class CombatDialog {
     backgroundSprite.inputEnabled = true;
     backgroundSprite.events.onInputDown.add(() => this.hide());
 
-    this.portrait1 = new PartyStatus(this.game, x + DIALOG_BORDER + PORTRAIT_WIDTH / 2, y + backgroundSprite.height - DIALOG_BORDER, this.group)
-    this.portrait2 = new PartyStatus(this.game, x + backgroundSprite.width - DIALOG_BORDER - PORTRAIT_WIDTH / 2, y + backgroundSprite.height - DIALOG_BORDER, this.group)
+    this.portrait1 = new PartyStatus(this.game, x + DIALOG_BORDER + PORTRAIT_WIDTH / 2 + PORTRAIT_PADDING, y + backgroundSprite.height - DIALOG_BORDER, this.group)
+    this.portrait2 = new PartyStatus(this.game, x + backgroundSprite.width - DIALOG_BORDER - PORTRAIT_WIDTH / 2 - PORTRAIT_PADDING, y + backgroundSprite.height - DIALOG_BORDER, this.group)
     this.portrait2.mirror();
 
-    this.dialogTextbox = new Phaser.Text(
-      this.game, x + backgroundSprite.width / 2,
-      y + DIALOG_BORDER + DIALOG_PADDING,
-      '',
-      {
-        font: '24px Augusta',
-        fill: '#492811',
-        wordWrap: true,
-        wordWrapWidth: backgroundSprite.width - 2 * (DIALOG_BORDER + PORTRAIT_PADDING) - PORTRAIT_WIDTH,
-        align: 'center'
-      }
-    );
-    this.dialogTextbox.anchor.setTo(0.5);
-    this.group.add(this.dialogTextbox);
+    this.combatAction = new PlotDialog(game, x, y + 400, 'alert', this.group);
     this.hide();
   }
   display(attacker, defender, action) {
@@ -45,7 +33,7 @@ export default class CombatDialog {
     } else {
       this.portrait2.setVisible(false);
     }
-    this.dialogTextbox.text = action; 
+    this.combatAction.display(action);
     this.group.visible = true;
     return new Promise(r => {
       this.hideCb = r;

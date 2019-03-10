@@ -89,6 +89,7 @@ export default {
   },
   showCombatStart (enemies) {
     this.disableButtons();
+    this.partyStatuses.forEach(status => status.setVisible(false));
     this.locationTxt.visible = false;
     return this.smallPlotDialog.display('We have been ambushed by ' + enemies.length + ' enemies!');
   },
