@@ -35,9 +35,9 @@ function start (_ui) {
   campaign.goals = [builder.makeGoal(startingLocation.id)];
   // TODO: More than a goal
   playerStatus.location = startingLocation;
-  ui.showIntro(dialogMaker.campaignIntro(campaign)).then(() => {
-    gotoLocation(playerStatus.location);
-  });
+  ui.showTitle()
+    .then(() => ui.showIntro(dialogMaker.campaignIntro(campaign)))
+    .then(() => gotoLocation(playerStatus.location));
 }
 
 function updateContext() {

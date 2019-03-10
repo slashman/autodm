@@ -5,6 +5,7 @@ import PlotDialog from './ui/PlotDialog';
 import items from './generators/items';
 import Time from './Time';
 import CombatDialog from './ui/CombatDialog';
+import Title from './ui/Title';
 
 export default {
   init(game) {
@@ -34,6 +35,8 @@ export default {
     this.smallPlotDialog = new PlotDialog(game, 100, 50, 'dialog2', undefined);
     this.combatDialog = new CombatDialog(game, 100, 50, undefined);
     this.disableButtons();
+
+    this.title = new Title(game, undefined);
   },
   disableButtons() {
     this.buttons.forEach(button => button.setVisible(false));
@@ -97,5 +100,8 @@ export default {
       person: boss,
       dialog: ['How could this happen!']
     });
+  },
+  showTitle() {
+    return this.title.show();
   }
 }
