@@ -26,6 +26,7 @@ export default {
         connection.to.connections.push(recyprocalConnection);
       });
     });
+    this.locationsMap = locationsMap;
     return locationsMap;
   },
   getLocationNear(locationId) {
@@ -37,5 +38,8 @@ export default {
   },
   getImportantPlaces() {
     return locations.filter(l => l.important === true);
+  },
+  getLocationById(locationId) {
+    return this.locationsMap[locationId];
   }
 }

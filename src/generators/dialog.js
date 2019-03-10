@@ -1,4 +1,5 @@
 import random from '../random';
+import world from '../world';
 
 const FAMILY_MEMBERS = [
   'wife',
@@ -50,12 +51,12 @@ export default {
     return text;
   },
   leadToPerson(person, locationId, enemy) {
-    return `${person.description} living in ${locationId} knows how to vanquish ${enemy.name}.`;
+    return `${person.description} living in ${world.getLocationById(locationId).name} knows how to vanquish ${enemy.name}.`;
   },
   anecdote(enemy) {
     return `${enemy.name} killed my ${random.from(FAMILY_MEMBERS)}.`;
   },
   hintToFind(item, locationId) {
-    return `If you expect to have a chance to defeat him, you are going to need the ${item.description}. It can be found in ${locationId}`;
+    return `If you expect to have a chance to defeat him, you are going to need the ${item.description}. It can be found in ${world.getLocationById(locationId).name}`;
   }
 };
