@@ -24,9 +24,9 @@ export default {
     }
     
     this.locationTxt = this.game.add.text(50, 550, 'Location', {fill: "#000000"});
-    this.eventTxt = this.game.add.text(80, 50, '', {fill: "#000000"});
 
-    this.plotDialog = new PlotDialog(game, 100, 50, undefined)
+    this.plotDialog = new PlotDialog(game, 100, 50, 'dialog', undefined)
+    this.smallPlotDialog = new PlotDialog(game, 100, 50, 'dialog2', undefined)
     
   },
   disableButtons() {
@@ -49,13 +49,11 @@ export default {
     this.dialog.display(event);
   },
   showFindEvent(event) {
-    //TODO: Show event window and item
     const item = items.get(event.itemId);
-    this.eventTxt.text += '\nYou find ' + item.description;
+    return this.smallPlotDialog.display('You find ' + item.description);
   },
   showDiscoverConnectionEvent(event) {
-    //TODO: Show event window and item
-    this.eventTxt.text += '\n' + event.description;
+    return this.smallPlotDialog.display(event.description);
   },
   showIntro(campaign) {
     let text = '';
@@ -73,10 +71,7 @@ export default {
   },
   readOption() {
     return new Promise (resolve => {
-      this.optionListener = (option) => {
-        this.eventTxt.text = '';
-        resolve(option);
-      }
+      this.optionListener = (option) => resolve(option);
     });
   },
   selectOption(index) {
