@@ -13,8 +13,13 @@ let sequence = 0;
 
 export default {
   makeGoal(startingLocation) {
-    const bosses = ['boss3', 'boss2', 'boss1']; // TODO: Different types of subgoals
-    // TODO: Random bosses, with names
+    const numBosses = random.choice(4);
+    const bosses = [];
+    for (let i = 0; i < numBosses; i++) {
+      bosses.push(persons.randomBoss());
+    }
+    // TODO: Different types of subgoals
+    
     const villain = bosses[bosses.length - 1];
     const goal = {
       type: 'defeat',
@@ -83,7 +88,7 @@ export default {
       }
       currentLocation = world.getLocationNear(currentLocation);
       const battleBossActivity = this.buildBattleMob({
-        person: persons.createMob(boss),
+        person: boss,
         locationId: currentLocation.id,
         requiredItems
       });

@@ -26,6 +26,8 @@ const ENEMY_RACES = [
   { id: 'troll', name: 'Troll' }
 ];
 
+const BOSS_PICS = ['boss1', 'boss2', 'boss3'];
+
 const MALE_PICS = 19;
 const FEMALE_PICS = 14;
 
@@ -71,9 +73,10 @@ export default {
   randomName() {
     return random.from(NAMES);
   },
-  createMob(id) {
+  randomBoss() {
     const mob = this.randomEnemy();
-    mob.pic = id;
+    mob.pic = random.from(BOSS_PICS);
+    mob.name = random.from(NAMES);
     return mob;
   }
 }
