@@ -5,10 +5,13 @@ let ui = null;
 let combatantIndex = 0;
 let combatants = null;
 let party = null;
+let status = null;
 
-function combat(_ui, _party, _enemies, level) {
+function combat(_ui, _status, _enemies) {
+  status = _status;
   ui = _ui;
-  party = _party;
+  party = status.party;
+  const level = status.level;
   let enemies;
   if (_enemies) {
     if (_enemies.length) {
@@ -25,9 +28,40 @@ function combat(_ui, _party, _enemies, level) {
   }
   combatants = party.concat(enemies);
   combatantIndex = 0;
-  return ui.showCombatStart(enemies).then(() => doCombat()).then(victory => {
-    return ui.showCombatVictory(victory).then(() => victory);
-  });
+  return ui.showCombatStart(enemies)
+    .then(() => doCombat())
+    .then(victory => {
+      const outcome = {
+        xpPrize: 0,
+        victory
+      };
+      if (victory) {
+        outcome.xpPrize = enemies.length * level * 20;
+        status.xp += outcome.xpPrize;
+        if (status.xp > status.nextLevel) {
+          outcome.levelUp = true;
+          status.party.forEach(member => {
+            const baseStats = {
+              atk: member.attack / status.level,
+              def: member.defense / status.level,
+              hp: member.hp.current / status.level
+            }
+            baseStats.atk *= (status.level + 1);
+            baseStats.def *= (status.level + 1);
+            baseStats.hp *= (status.level + 1);
+            member.attack = baseStats.atk;
+            member.defense = baseStats.def;
+            member.hp.max = baseStats.hp;
+            member.hp.current = baseStats.hp;
+          });
+          status.level++;
+          status.nextLevel *= 2;
+          outcome.newLevel = status.level;
+        }
+      }
+      return ui.showCombatOutcome(outcome)
+        .then(() => victory);
+    });
 }
 
 function doCombat() {

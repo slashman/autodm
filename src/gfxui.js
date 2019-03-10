@@ -95,8 +95,17 @@ export default {
     this.locationTxt.visible = false;
     return this.smallPlotDialog.display('We have been ambushed by ' + enemies.length + ' enemies!');
   },
-  showCombatVictory(victory) {
-    return this.smallPlotDialog.display(victory ? 'Victory!' : 'Your party has been defeated...');
+  showCombatOutcome(outcome) {
+    let text = '';
+    if (outcome.victory) {
+      text += 'Victory!\n\nYour party gets ' + outcome.xpPrize + ' experience points';
+      if (outcome.levelUp) {
+        text += '\n\nLevel Up! You are now level ' + outcome.newLevel;
+      }
+    } else {
+      text += 'Your party has been defeated...';
+    }
+    return this.smallPlotDialog.display(text);
   },
   displayCombatAction(attacker, defender, action) {
     return this.combatDialog.display(attacker, defender, action);
