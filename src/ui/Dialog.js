@@ -4,6 +4,7 @@ const DIALOG_BORDER = 40;
 const PORTRAIT_HEIGHT = 300;
 const PORTRAIT_WIDTH = 300;
 const DIALOG_PADDING = 40;
+const PORTRAIT_PADDING = 20;
 
 export default class Dialog {
   constructor(game, x, y, parentGroup) {
@@ -19,14 +20,14 @@ export default class Dialog {
     this.portrait = new PartyStatus(this.game, x + DIALOG_BORDER + PORTRAIT_WIDTH / 2, y + backgroundSprite.height - DIALOG_BORDER, this.group)
 
     this.dialogTextbox = new Phaser.Text(
-      this.game, x + DIALOG_BORDER + PORTRAIT_WIDTH + DIALOG_PADDING,
+      this.game, x + DIALOG_BORDER + PORTRAIT_WIDTH + PORTRAIT_PADDING,
       y + DIALOG_BORDER + DIALOG_PADDING,
       '',
       {
         font: '24px Augusta',
         fill: '#492811',
         wordWrap: true,
-        wordWrapWidth: backgroundSprite.width - 2 * (DIALOG_BORDER + DIALOG_PADDING) - PORTRAIT_WIDTH,
+        wordWrapWidth: backgroundSprite.width - 2 * DIALOG_BORDER - PORTRAIT_WIDTH - PORTRAIT_PADDING,
       }
     );
 
@@ -36,7 +37,8 @@ export default class Dialog {
   }
   display(conversation) {
     this.portrait.update(conversation.person);
-    let text = 'You meet ' + conversation.person.description + '\nHe says: ';
+    // TODO: Display conversation.person.description somewhere?
+    let text = '';
     conversation.dialog.forEach(dialog => text += dialog + '\n');
     this.dialogTextbox.text = text; 
     this.group.visible = true;
