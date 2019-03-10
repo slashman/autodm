@@ -37,8 +37,7 @@ function start (_ui) {
   ];
   campaign.goals[0].plotline = builder.makePlotline('lugunum');
   ui.showIntro(campaign).then(() => {
-    enterLocation(playerStatus.location);
-    updateContext();
+    gotoLocation(playerStatus.location);
   });
 }
 
@@ -61,9 +60,15 @@ function updateContext() {
 
 function selectOption(option) {
   if (option && option.type === 'enterLocation') {
-    enterLocation(option.location);
+    gotoLocation(option.location);
   }
-  updateContext();
+}
+
+function gotoLocation(location) {
+  ui.travelToLocation(location).then(() => { 
+    enterLocation(location);
+    updateContext();
+  });
 }
 
 function enterLocation(location) {

@@ -3,6 +3,7 @@ import PartyStatus from './ui/PartyStatus';
 import Dialog from './ui/Dialog';
 import PlotDialog from './ui/PlotDialog';
 import items from './generators/items';
+import Time from './Time';
 
 export default {
   init(game) {
@@ -28,14 +29,21 @@ export default {
     this.plotDialog = new PlotDialog(game, 100, 50, undefined)
     
   },
-  printLocationInfo(location, options) {
+  disableButtons() {
     this.buttons.forEach(button => button.setVisible(false));
+  },
+  printLocationInfo(location, options) {
     options.forEach((option, i) => {
       this.buttons[i].setVisible(true)
       this.buttons[i].setText(option.location.name);
     });
     this.locationTxt.text = location.name;
+  },
+  travelToLocation(location) {
+    // TODO: Calculate time based on distance to travel
+    this.disableButtons();
     this.game.add.tween(this.map).to({x: -location.x + 1024 / 2, y: -location.y + 768 / 2 }, 1000, null, true)
+    return Time.wait(1500);
   },
   showMeetEvent(event) {
     this.dialog.display(event);
