@@ -28,9 +28,13 @@ const FAMILY_MEMBERS = [
 ];
 
 const VILLAIN_ADJECTIVES = ['cruel', 'evil', 'deceiving', 'undead', 'opressing', 'vicious'];
-const GOOD_ADJECTIVES = ['holy', 'good', 'sacred', 'bright', 'freedom'];
+const GOOD_ADJECTIVES = ['holy', 'good', 'sacred', 'bright', 'free'];
 const VILLAIN_TITLES = ['wizard', 'king', 'emperor', 'prince', 'cleric', 'warrior'];
-const ARTIFACT_TYPES = ['ring', 'amulet', 'crown', 'sword', 'grimoire', 'statue', 'crystal', 'orb']
+const LIEGE_TITLES = ['liege', 'king', 'emperor', 'prince', 'friend'];
+const ARTIFACT_TYPES = ['ring', 'amulet', 'crown', 'sword', 'grimoire', 'statue', 'crystal', 'orb'];
+const KILL_VERBS = ['defeat', 'kill', 'vanquish', 'anhilate', 'face', 'destroy'];
+const KILLED_VERBS = ['defeated', 'killed', 'vanquished', 'anhilated', 'destroyed'];
+const JOBS = ['cleric', 'warrior', 'barmaid', 'bartender', 'blacksmith', 'fisherman'];
 
 export default {
   villainFeat() {
@@ -85,13 +89,77 @@ export default {
     text += ' and met with your long lost friends of adventure.\n\nWill you be able to save Noresskia from doom?';
     return text;
   },
+  rumor() {
+    const choice = random.choice(3);
+    if (choice === 1) {
+      return 'I heard that';
+    } else if (choice === 2) {
+      return 'It might be just a rumor, but I heard';
+    } else if (choice === 3) {
+      return 'A friend told me that';
+    }
+  },
+  aPerson(person) {
+    const choice = random.choice(3);
+    if (choice === 1) {
+      return 'someone';
+    } else if (choice === 2) {
+      return person.description;
+    } else if (choice === 3) {
+      return 'a ' + random.from(GOOD_ADJECTIVES) + ' person';
+    }
+  },
+  knowsHowToDefeat(enemy){
+    const choice = random.choice(3);
+    if (choice === 1) {
+      return `knows how to ${random.from(KILL_VERBS)} him`;
+    } else if (choice === 2) {
+      return `may help you in your quest to ${random.from(KILL_VERBS)} him`;
+    } else if (choice === 3) {
+      return `used to work for him, and knows his secrets.`;
+    }
+  },
   leadToPerson(person, locationId, enemy) {
-    return `${person.description} living in ${world.getLocationById(locationId).name} knows how to vanquish ${enemy.name}.`;
+    return `${this.rumor()} ${this.aPerson(person)} in ${world.getLocationById(locationId).name} ${this.knowsHowToDefeat(enemy)}.`;
   },
   anecdote(enemy) {
-    return `${enemy.name} killed my ${random.from(FAMILY_MEMBERS)}.`;
+    const choice = random.choice(4);
+    if (choice === 1) {
+      return `${enemy.name} ${random.from(KILLED_VERBS)} my ${random.from(FAMILY_MEMBERS)}.`;
+    } else if (choice === 2) {
+      return `My ${random.from(LIEGE_TITLES)} was ${random.from(KILLED_VERBS)} by ${enemy.name} in the battlefield`;
+    } else if (choice === 3) {
+      return `I used to work for ${enemy.name}, and luckily managed to escape.`;
+    } else if (choice === 4) {
+      return `I hate ${enemy.name} with intensity, I wish he could be ${random.from(KILLED_VERBS)}.`;
+    }
+  },
+  youWillNeedThe(item) {
+    const choice = random.choice(4);
+    if (choice === 1) {
+      return `You are going to need the ${item.description}`;
+    } else if (choice === 2) {
+      return `He fears the ${item.description}`;
+    } else if (choice === 3) {
+      return `The ${item.description} can void his magic.`;
+    } else if (choice === 4) {
+      return `The power of the ${item.description} is our only hope.`;
+    }
+  },
+  itCanBeFoundAt(locationId) {
+    const locationName = world.getLocationById(locationId).name;
+    const choice = random.choice(4);
+    if (choice === 1) {
+      return `It was last seen at ${locationName}`;
+    } else if (choice === 2) {
+      return `A ${random.from(JOBS)} keeps it safe at ${locationName}`;
+    } else if (choice === 3) {
+      return `I hid it at ${locationName}`;
+    } else if (choice === 4) {
+      return `I read on a book that it can be found at ${locationName}`;
+    }
   },
   hintToFind(item, locationId) {
-    return `If you expect to have a chance to defeat him, you are going to need the ${item.description}. It can be found in ${world.getLocationById(locationId).name}`;
+    return `${this.youWillNeedThe(item)}. ${this.itCanBeFoundAt(locationId)}`;
   }
 };
