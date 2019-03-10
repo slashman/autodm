@@ -25,6 +25,11 @@ export default {
     person.pic = random.choice(person.gender === 'male' ? MALE_PICS : FEMALE_PICS);
     return person;
   },
+  randomEnemy() {
+    const randomPerson = this.random();
+    randomPerson.enemy = true;
+    return randomPerson;
+  },
   randomName() {
     return random.from(NAMES);
   }

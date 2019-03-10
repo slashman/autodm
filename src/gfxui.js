@@ -4,6 +4,7 @@ import Dialog from './ui/Dialog';
 import PlotDialog from './ui/PlotDialog';
 import items from './generators/items';
 import Time from './Time';
+import CombatDialog from './ui/CombatDialog';
 
 export default {
   init(game) {
@@ -31,6 +32,7 @@ export default {
 
     this.plotDialog = new PlotDialog(game, 100, 50, 'dialog', undefined);
     this.smallPlotDialog = new PlotDialog(game, 100, 50, 'dialog2', undefined);
+    this.combatDialog = new CombatDialog(game, 100, 50, undefined);
     this.disableButtons();
   },
   disableButtons() {
@@ -82,5 +84,11 @@ export default {
   },
   selectOption(index) {
     this.optionListener && this.optionListener(index);
-  }
+  },
+  showCombatVictory() {
+    return this.smallPlotDialog.display('Victory!');
+  },
+  displayCombatAction(attacker, defender, action) {
+    return this.combatDialog.display(attacker, defender, action);
+  },
 }

@@ -3,6 +3,7 @@ import builder from './builder';
 import world from './world';
 import consoleui from './consoleui';
 import items from './generators/items';
+import combat from './combat';
 
 const locationsMap = world.getLocationsMap();
 
@@ -49,7 +50,7 @@ function updateContext() {
   const options = [];
   location.connections.forEach(connection => {
     options.push ({
-      type: 'enterLocation',
+      type: 'gotoLocation',
       location: connection.to
     })
   });
@@ -59,13 +60,17 @@ function updateContext() {
 }
 
 function selectOption(option) {
-  if (option && option.type === 'enterLocation') {
+  if (option && option.type === 'gotoLocation') {
     gotoLocation(option.location);
   }
 }
 
 function gotoLocation(location) {
-  ui.travelToLocation(location).then(() => { 
+  ui.travelToLocation(location).then(() => {
+    if (true) {
+      return combat(ui, playerStatus.party);
+    }
+  }).then(() => {
     enterLocation(location);
     updateContext();
   });

@@ -22,4 +22,7 @@ export default class PartyStatus {
   setVisible(visible) {
     this.group.visible = visible;
   }
+  mirror() {
+    this.portraitSprite.scale.x *= -1;
+  }
 }
