@@ -14,6 +14,9 @@ export default {
       location.connections = location.connections.filter(c => {
         return locationsMap[c.to] !== undefined;
       });
+    });
+    
+    locations.forEach(location => {
       location.connections.forEach(connection => {
         if (connection.recyprocal) {
           return;
@@ -33,8 +36,12 @@ export default {
     return locationsMap;
   },
   getLocationNear(locationId) {
-    // TODO: Compare distance
-    return this.randomLocation();
+    const walks = random.choice(2) + 1;
+    let currentLocation = this.getLocationById(locationId);
+    for (let i = 0; i < walks; i++) {
+      currentLocation = random.from(currentLocation.connections).to
+    }
+    return currentLocation;
   },
   randomLocation() {
     return random.from(locations);

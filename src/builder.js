@@ -43,7 +43,7 @@ export default {
     personsToFind.push(firstActivity.nextStep);
     plotline.push(firstActivity);
     let currentActivity = firstActivity;
-    let currentLocation = startingLocation;
+    let currentLocation = world.getLocationById(startingLocation);
 
     //// Test
     /*plotline.push(this.buildBattleMob({
@@ -61,7 +61,7 @@ export default {
         const nextQuestType = random.from(QUEST_TYPES);
         let nextPerson = random.from(personsToFind);
         personsToFind = personsToFind.filter(x => x !== nextPerson);
-        currentLocation = world.getLocationNear(currentLocation);
+        currentLocation = world.getLocationNear(currentLocation.id);
         if (!nextPerson) {
           nextPerson = {
             person: persons.randomPerson(),
@@ -86,7 +86,7 @@ export default {
         }
         currentActivity = nextActivity;
       }
-      currentLocation = world.getLocationNear(currentLocation);
+      currentLocation = world.getLocationNear(currentLocation.id);
       const battleBossActivity = this.buildBattleMob({
         person: boss,
         locationId: currentLocation.id,
