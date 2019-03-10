@@ -6,7 +6,7 @@ let combatantIndex = 0;
 let combatants = null;
 let party = null;
 
-function combat(_ui, _party, _enemies) {
+function combat(_ui, _party, _enemies, level) {
   ui = _ui;
   party = _party;
   let enemies;
@@ -21,7 +21,7 @@ function combat(_ui, _party, _enemies) {
   }
   const padding = random.choice(party.length - enemies.length);
   for (let i = 0; i < padding; i++) {
-    enemies.push(persons.randomEnemy())
+    enemies.push(persons.randomEnemy(level))
   }
   combatants = party.concat(enemies);
   combatantIndex = 0;
@@ -76,7 +76,7 @@ function selectActionFor(combatant, enemies) {
 }
 
 function attack(attacker, defender) {
-  let damage = random.choice(attacker.attack);
+  let damage = random.choice(attacker.attack) * 2;
   damage -= random.choice(defender.defense);
   let message = attacker.name + ' attacks ' + defender.name;
   if (damage > 0) {

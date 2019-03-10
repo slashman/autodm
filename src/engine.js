@@ -13,7 +13,8 @@ const playerStatus = {
   location: null,
   party: [],
   completed: {},
-  items: {}
+  items: {},
+  level: 1
 };
 
 const campaign = {};
@@ -70,7 +71,7 @@ function selectOption(option) {
 function gotoLocation(location) {
   ui.travelToLocation(location).then(() => {
     if (random.chance(20)) {
-      return combat(ui, playerStatus.party);
+      return combat(ui, playerStatus.party, undefined, playerStatus.level);
     } else {
       return true;
     }
@@ -173,7 +174,7 @@ function processMeetEvent(event) {
 
 function processBattleEvent(event) {
   return ui.showMeetEvent(event).then(() => {
-    return combat(ui, playerStatus.party, event.person);
+    return combat(ui, playerStatus.party, event.person, playerStatus.level);
   }).then(() => {
     if (event.isBossBattle) {
       return ui.showBossDefeated(event.person);

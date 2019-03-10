@@ -16,7 +16,7 @@ export default {
     const numBosses = random.choice(4);
     const bosses = [];
     for (let i = 0; i < numBosses; i++) {
-      bosses.push(persons.randomBoss());
+      bosses.push(persons.randomBoss(i + 4));
     }
     // TODO: Different types of subgoals
     
