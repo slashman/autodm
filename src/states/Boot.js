@@ -18,6 +18,23 @@ export default class extends Phaser.State {
         active: this.fontsLoaded
       })
     }
+    // game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+    this.game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
+    const docElement = document.documentElement;
+
+    const heightScale = docElement.clientHeight / this.game.height;
+    const widthScale = docElement.clientWidth / this.game.width;
+
+    console.log('heightScale ' + heightScale);
+    console.log('widthScale ' + widthScale);
+
+    const reigningScale = docElement.clientWidth > docElement.clientHeight ? heightScale : widthScale;
+    this.game.scale.setUserScale(reigningScale, reigningScale);
+    
+    /*if (this.game.height * reigningScale > docElement.clientHeight) {
+      this.game.scale.setGameSize(this.game.width, docElement.clientHeight / reigningScale)
+    }*/
 
     let text = this.add.text(this.world.centerX, this.world.centerY, 'loading fonts', { font: '16px Arial', fill: '#dddddd', align: 'center' })
     text.anchor.setTo(0.5, 0.5)
